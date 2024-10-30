@@ -1,0 +1,104 @@
+.page_container {
+  height: 100vh;
+  display: flex;
+  padding: 0px 20px;
+  flex-direction: column;
+  background: linear-gradient(to bottom, var(--blue), var(--purple));
+  overflow-y: scroll;
+}
+
+.page_container h1 {
+  color: var(--off-white);
+  padding: 40px 0px 0px 0px;
+}
+
+.content_container {
+  margin-top: 45px;
+  gap: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cta_container {
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.cta_container h2 {
+  font-size: 1.8rem;
+}
+
+.login_container {
+  background: var(--off-white);
+  padding: 30px 40px 40px 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login_form input[type="text"] {
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+.login_form div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login_form a {
+  margin-top: 20px;
+  color: var(--purple);
+}
+
+.button {
+  height: 30px;
+  border: none;
+  background: none;
+  background-color: var(--pink);
+  margin-top: 20px;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  align-items: center;
+  padding-bottom: 40px;
+  gap: 40px;
+  color: var(--off-white);
+}
+
+@media (min-width: 500px) {
+  .page_container h1 {
+    padding: 40px 0px 0px 40px;
+  }
+}
+
+@media (min-width: 890px) {
+  .content_container {
+    flex-direction: row;
+    gap: 70px;
+  }
+}
