@@ -33,6 +33,10 @@
   font-size: 1.8rem;
 }
 
+.cta_container p {
+  line-height: 1.5rem;
+}
+
 .login_container {
   background: var(--off-white);
   padding: 30px 40px 40px 40px;
@@ -69,15 +73,15 @@
   color: var(--purple);
 }
 
-.button {
-  height: 30px;
-  border: none;
-  background: none;
-  background-color: var(--pink);
+.login_button {
   margin-top: 20px;
-  color: white;
-  font-weight: bold;
-  border-radius: 5px;
+  width: auto;
+}
+
+.letter_spacing h1,
+.letter_spacing h2,
+.letter_spacing p {
+  letter-spacing: 0.05rem;
 }
 
 .footer {

@@ -38,3 +38,23 @@ a {
     color-scheme: dark;
   }
 }
+
+.page_container {
+  height: 100vh;
+  display: flex;
+  padding: 0px 20px;
+  flex-direction: column;
+  background: linear-gradient(to bottom, var(--blue), var(--purple));
+  overflow-y: scroll;
+}
+
+.button {
+  min-height: 30px;
+  border: none;
+  background: none;
+  background-color: var(--pink);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  width: fit-content;
+}

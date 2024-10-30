@@ -1,0 +1,33 @@
+.page_container {
+  height: 100vh;
+  display: flex;
+  padding: 20px 20px;
+  flex-direction: column;
+  background: linear-gradient(to bottom, var(--blue), var(--purple));
+  overflow-y: scroll;
+  gap: 30px;
+}
+
+.heading_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page_container h1 {
+  color: var(--off-white);
+  font-size: 1.5rem;
+}
+
+.page_container h2 {
+  color: var(--off-white);
+  font-size: 1rem;
+}
+
+.inventory_table tr th {
+  text-align: left;
+}
+
+.button {
+  padding: 10px;
+}
