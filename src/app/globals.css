@@ -4,8 +4,11 @@
 
   --off-white: #ebebeb;
   --blue: #88bbff;
-  --purple: #7b44ff;
+  --blue-light: #ddeeff;
+  --purple: #7744ff;
+  --purple-light: #eeddff;
   --pink: #ff5577;
+  --pink-light: #ffaacc;
 }
 
 html,
