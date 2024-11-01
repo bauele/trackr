@@ -61,3 +61,7 @@ a {
   border-radius: 5px;
   width: fit-content;
 }
+
+.button-pad {
+  padding: 10px;
+}
