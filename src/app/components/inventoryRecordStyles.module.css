@@ -1,3 +1,9 @@
 .item_record {
   border-bottom: 1px solid silver;
 }
+
+.selected {
+  /*  This needs to be marked as important in order to
+      overide any pre-existing background colors */
+  background: var(--blue) !important;
+}
