@@ -7,7 +7,7 @@ import { InventoryTable } from "../components/inventoryTable";
 
 import { useEffect, useState } from "react";
 
-export default function Login() {
+export default function Dashboard() {
   const [items, setItems] = useState<Array<any>>([]);
 
   useEffect(() => {
@@ -17,24 +17,42 @@ export default function Login() {
         itemName: "Blanket",
         dateAdded: "10/30/2024",
         quantity: 3,
-        dateModified: "10/31/2024",
+        lastModified: "10/31/2024",
       },
       {
         itemName: "Towel",
         dateAdded: "10/28/2024",
         quantity: 2,
-        dateModified: "10/29/2024",
+        lastModified: "10/29/2024",
       },
       {
         itemName: "Water Bottle",
         dateAdded: "10/28/2024",
         quantity: 12,
-        dateModified: "10/29/2024",
+        lastModified: "10/29/2024",
       },
     ];
 
     setItems(data);
   }, []);
+
+  useEffect(() => {}, [items]);
+
+  function onRowUpdate(rowIndex: number, field: string, value: string) {
+    //  Create a copy of the current data
+    let newItems = [...items];
+
+    //  Update the specified field with the new value
+    if (field === "quantity") {
+      newItems[rowIndex].quantity = value;
+    }
+    if (field === "itemName") {
+      newItems[rowIndex].itemName = value;
+    }
+
+    //  Set the item list to the updated list
+    setItems(newItems);
+  }
 
   return (
     <div className={styles.page_container}>
@@ -54,7 +72,12 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <InventoryTable items={items} />
+        <InventoryTable
+          items={items}
+          onRowUpdate={(index, field, value) =>
+            onRowUpdate(index, field, value)
+          }
+        />
       </div>
     </div>
   );

@@ -2,8 +2,23 @@
   border-bottom: 1px solid silver;
 }
 
+.item_record td {
+  /*  This rule prevents the td from expanding and causing the
+      columns to resize when user is editing an entry */
+  max-width: 0px;
+
+  overflow-x: clip;
+}
+
 .selected {
   /*  This needs to be marked as important in order to
       overide any pre-existing background colors */
   background: var(--blue) !important;
+}
+
+.row {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

@@ -1,0 +1,7 @@
+.editable_input {
+  height: 18px;
+
+  /*  This width rule prevents the input element from
+      being clipped */
+  width: 98%;
+}

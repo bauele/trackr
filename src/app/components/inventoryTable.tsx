@@ -2,16 +2,17 @@ import styles from "./inventoryTableStyles.module.css";
 import classNames from "classnames";
 
 import { InventoryRecord } from "./inventoryRecord";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface InventoryTableProps {
   items: Array<any>; //  TODO: Change this to be of the model type
+  onRowUpdate: (rowIndex: number, field: string, value: string) => void;
 }
 
 //  This component represent a table of inventory records. It will
 //  be used to display all of the inventory that a user has added
 //  into their account.
-export function InventoryTable({ items }: InventoryTableProps) {
+export function InventoryTable({ items, onRowUpdate }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<Array<number>>([]);
 
   //  Add or remove a selected row
@@ -98,6 +99,7 @@ export function InventoryTable({ items }: InventoryTableProps) {
               //  If the user checks the row, this component should handle the process
               //  of selecting that row
               onSelect={() => toggleSelectRow(index)}
+              onRowUpdate={(field, value) => onRowUpdate(index, field, value)}
             />
           ))}
         </tbody>

@@ -34,7 +34,6 @@
   border: 1px solid silver;
   padding: 10px;
   text-align: left;
-  /*background: linear-gradient(to bottom, #937cee, var(--purple));*/
   background: var(--purple);
   color: var(--off-white);
 }

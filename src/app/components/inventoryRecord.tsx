@@ -1,14 +1,17 @@
-import { ChangeEvent, ChangeEventHandler } from "react";
+import { ChangeEvent, useEffect } from "react";
 import styles from "./inventoryRecordStyles.module.css";
 import classNames from "classnames";
+
+import { EditableLabel } from "./editableLabel";
 
 interface InventoryRecordProps {
   itemName: string;
   dateAdded: string;
-  quantity: number;
+  quantity: string;
   lastModified: string;
   isSelected: boolean;
   onSelect: (event: ChangeEvent<HTMLInputElement>) => void;
+  onRowUpdate: (field: string, value: string) => void;
 }
 
 export function InventoryRecord({
@@ -18,7 +21,15 @@ export function InventoryRecord({
   lastModified,
   isSelected,
   onSelect,
+  onRowUpdate,
 }: InventoryRecordProps) {
+  function updateValue() {
+    //  Send message to table insructing it that a value was.
+    //  Each editable label in this row should have an id
+    //  assigned that will allow it to be modified in json
+    //  at the table level
+  }
+
   return (
     <tr
       className={classNames(styles.item_record, isSelected && styles.selected)}
@@ -35,15 +46,24 @@ export function InventoryRecord({
         />
       </td>
       <td>
-        <input type="text" placeholder={itemName}></input>
-
-        <br></br>
-        {dateAdded}
+        <span className={styles.row}>
+          <EditableLabel
+            text={itemName}
+            fieldName="itemName"
+            onUpdate={(field, value) => onRowUpdate(field, value)}
+          />
+          {dateAdded}
+        </span>
       </td>
       <td>
-        {quantity}
-        <br></br>
-        {lastModified}
+        <span className={styles.row}>
+          <EditableLabel
+            text={quantity}
+            fieldName="quantity"
+            onUpdate={(field, value) => onRowUpdate(field, value)}
+          />
+          {lastModified}
+        </span>
       </td>
     </tr>
   );
