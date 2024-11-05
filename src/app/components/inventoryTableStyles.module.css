@@ -41,3 +41,46 @@
 .item_record {
   border-bottom: 1px solid silver;
 }
+
+.floating_bar {
+  background: var(--pink);
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 10px;
+
+  align-self: center;
+  position: fixed;
+  top: 105%;
+}
+
+.float_in {
+  animation-name: float_in;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.float_out {
+  animation-name: float_out;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+/* The animation code */
+@keyframes float_in {
+  from {
+    top: 105%;
+  }
+  to {
+    top: 85%;
+  }
+}
+
+@keyframes float_out {
+  from {
+    top: 85%;
+  }
+  to {
+    top: 105%;
+  }
+}

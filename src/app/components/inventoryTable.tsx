@@ -6,13 +6,20 @@ import { useState, useEffect } from "react";
 
 interface InventoryTableProps {
   items: Array<any>; //  TODO: Change this to be of the model type
+  onAddItem: () => void;
+  onDeleteItem: (selectedRows: Array<number>) => void;
   onRowUpdate: (rowIndex: number, field: string, value: string) => void;
 }
 
 //  This component represent a table of inventory records. It will
 //  be used to display all of the inventory that a user has added
 //  into their account.
-export function InventoryTable({ items, onRowUpdate }: InventoryTableProps) {
+export function InventoryTable({
+  items,
+  onAddItem,
+  onDeleteItem,
+  onRowUpdate,
+}: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<Array<number>>([]);
 
   //  Add or remove a selected row
@@ -53,7 +60,10 @@ export function InventoryTable({ items, onRowUpdate }: InventoryTableProps) {
   return (
     <>
       <div className={styles.inventory_table_controls}>
-        <button className={classNames("button", "button-pad", styles.button)}>
+        <button
+          className={classNames("button", "button-pad", styles.button)}
+          onClick={() => onAddItem()}
+        >
           Add Item
         </button>
         <div className={styles.sort_controls}>
@@ -104,6 +114,21 @@ export function InventoryTable({ items, onRowUpdate }: InventoryTableProps) {
           ))}
         </tbody>
       </table>
+
+      <div
+        className={classNames(
+          styles.floating_bar,
+          selectedRows.length > 0 && styles.float_in,
+          selectedRows.length === 0 && styles.float_out
+        )}
+      >
+        <button
+          className={classNames("button", "button-pad", styles.delete_button)}
+          onClick={() => onDeleteItem(selectedRows)}
+        >
+          Delete
+        </button>
+      </div>
     </>
   );
 }

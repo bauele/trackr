@@ -16,19 +16,19 @@ export default function Dashboard() {
       {
         itemName: "Blanket",
         dateAdded: "10/30/2024",
-        quantity: 3,
+        quantity: "3",
         lastModified: "10/31/2024",
       },
       {
         itemName: "Towel",
         dateAdded: "10/28/2024",
-        quantity: 2,
+        quantity: "2",
         lastModified: "10/29/2024",
       },
       {
         itemName: "Water Bottle",
         dateAdded: "10/28/2024",
-        quantity: 12,
+        quantity: "12",
         lastModified: "10/29/2024",
       },
     ];
@@ -36,7 +36,31 @@ export default function Dashboard() {
     setItems(data);
   }, []);
 
-  useEffect(() => {}, [items]);
+  function onAddItem() {
+    //  Create a new item to be edited
+    let item = {
+      itemName: "New Item",
+      dateAdded: "",
+      quantity: "0",
+      lastModified: "",
+    };
+
+    //  Create a copy of the current data
+    let newItems = new Array<any>();
+    newItems.push(item);
+    newItems.push(...items);
+
+    setItems(newItems);
+  }
+
+  function onDeleteItem(selectedRows: Array<number>) {
+    //  Filter the new list of items to only contain
+    //  the rows that are not selected
+    let newItems = items.filter(
+      (value, index) => !selectedRows.includes(index)
+    );
+    setItems(newItems);
+  }
 
   function onRowUpdate(rowIndex: number, field: string, value: string) {
     //  Create a copy of the current data
@@ -74,6 +98,8 @@ export default function Dashboard() {
         </div>
         <InventoryTable
           items={items}
+          onAddItem={() => onAddItem()}
+          onDeleteItem={(selectedRows) => onDeleteItem(selectedRows)}
           onRowUpdate={(index, field, value) =>
             onRowUpdate(index, field, value)
           }
