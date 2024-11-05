@@ -50,6 +50,7 @@ export function InventoryRecord({
           <EditableLabel
             text={itemName}
             fieldName="itemName"
+            inputMode="text"
             onUpdate={(field, value) => onRowUpdate(field, value)}
           />
           {dateAdded}
@@ -60,6 +61,7 @@ export function InventoryRecord({
           <EditableLabel
             text={quantity}
             fieldName="quantity"
+            inputMode="numeric"
             onUpdate={(field, value) => onRowUpdate(field, value)}
           />
           {lastModified}

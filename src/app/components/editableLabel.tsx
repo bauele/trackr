@@ -11,12 +11,14 @@ import classNames from "classnames";
 interface EditableLabelProps {
   text: string;
   fieldName: string;
+  inputMode: "text" | "numeric";
   onUpdate: (field: string, value: string) => void;
 }
 
 export function EditableLabel({
   text,
   fieldName,
+  inputMode,
   onUpdate,
 }: EditableLabelProps) {
   const [isEditingMode, setIsEditingMode] = useState(false);
@@ -48,7 +50,12 @@ export function EditableLabel({
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code == "Enter" || event.code == "NumpadEnter") {
+    if (
+      event.code === "Enter" ||
+      event.key === "Enter" ||
+      event.code === "NumpadEnter"
+    ) {
+      event.preventDefault();
       updateValue(event);
     }
   };
@@ -58,9 +65,11 @@ export function EditableLabel({
     <input
       className={styles.editable_input}
       type="text"
+      inputMode={inputMode}
       placeholder={text}
       onBlur={(event) => onBlur(event)}
       onKeyDown={(event) => onKeyDown(event)}
+      onKeyUp={(event) => onKeyDown(event)}
       autoFocus={true}
     ></input>
   ) : (
