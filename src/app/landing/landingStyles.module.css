@@ -37,6 +37,20 @@
   line-height: 1.5rem;
 }
 
+.state_action_container {
+  background: var(--off-white);
+  padding: 30px 40px 40px 40px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 400px;
+}
+
+.state_action_container a {
+  cursor: pointer;
+}
+
 .login_container {
   background: var(--off-white);
   padding: 30px 40px 40px 40px;
@@ -54,7 +68,7 @@
   gap: 10px;
 }
 
-.login_form input[type="text"] {
+.login_form input {
   border: 1px solid rgb(175, 175, 175);
   border-radius: 5px;
   font-size: 1rem;
@@ -74,8 +88,12 @@
 }
 
 .login_button {
-  margin-top: 20px;
   width: auto;
+}
+
+.error {
+  color: red;
+  margin: 10px 0px;
 }
 
 .letter_spacing h1,

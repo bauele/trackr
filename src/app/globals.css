@@ -56,11 +56,19 @@ a {
   min-height: 30px;
   border: none;
   background: none;
-  background-color: var(--pink);
+
   color: white;
   font-weight: bold;
   border-radius: 5px;
   width: fit-content;
+}
+
+.bg-pink {
+  background-color: var(--pink);
+}
+
+.bg-purple {
+  background-color: var(--purple);
 }
 
 .button-pad {

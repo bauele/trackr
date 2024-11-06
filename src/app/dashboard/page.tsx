@@ -89,7 +89,12 @@ export default function Dashboard() {
             </div>
             <div>
               <button
-                className={classNames("button", "button-pad", styles.button)}
+                className={classNames(
+                  "button",
+                  "bg-pink",
+                  "button-pad",
+                  styles.button
+                )}
               >
                 Log Out
               </button>

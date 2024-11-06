@@ -61,7 +61,12 @@ export function InventoryTable({
     <>
       <div className={styles.inventory_table_controls}>
         <button
-          className={classNames("button", "button-pad", styles.button)}
+          className={classNames(
+            "button",
+            "bg-pink",
+            "button-pad",
+            styles.button
+          )}
           onClick={() => onAddItem()}
         >
           Add Item
