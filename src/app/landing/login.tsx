@@ -21,7 +21,7 @@ export default function Login({
   const [password, setPassword] = useState("");
   const [lastError, setLastError] = useState("");
 
-  const { user, firebaseLogIn, firebaseErrorToUserError } = useFirebase();
+  const { userId, firebaseLogIn, firebaseErrorToUserError } = useFirebase();
 
   async function logIn() {
     console.log(`Email: ${email} Password: ${password}`);

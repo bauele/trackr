@@ -7,16 +7,16 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 //  Logs a user into the service
-//  If successful, returns the auth token for the user
+//  If successful, returns success indicator
 //  Otherwise, returns an error code
 async function firebaseLogIn(email: string, password: string) {
   try {
-    let credentials = await signInWithEmailAndPassword(auth, email, password);
-    console.log(credentials);
+    await signInWithEmailAndPassword(auth, email, password);
     return "success";
   } catch (error) {
     //  A Firebase-specific error occured, such as an email email or password
@@ -32,13 +32,12 @@ async function firebaseLogIn(email: string, password: string) {
   }
 }
 
+//  Creates a user account on the service
+//  If successful, returns success indicator
+//  Otherwise, returns an error code
 async function firebaseCreateAccount(email: string, password: string) {
   try {
-    let credentials = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    await createUserWithEmailAndPassword(auth, email, password);
     return "success";
   } catch (error) {
     //  A Firebase-specific error occured, such as an email email or password
@@ -54,8 +53,10 @@ async function firebaseCreateAccount(email: string, password: string) {
   }
 }
 
+//  Sends a password reset email to the user
+//  If successful, returns success indicator
+//  Otherwise, returns an error code
 async function firebaseResetPassword(email: string) {
-  const auth = getAuth();
   try {
     let result = await sendPasswordResetEmail(auth, email);
     return "success";
@@ -69,6 +70,8 @@ async function firebaseResetPassword(email: string) {
   }
 }
 
+//  Maps a Firebase-specific error code to a user friendly string
+//  If error is not Firebase-specific, returns a generic error
 function firebaseErrorToUserError(error: string) {
   let errorMessage = "";
 
@@ -108,22 +111,32 @@ function firebaseErrorToUserError(error: string) {
   return errorMessage;
 }
 
-//  Custom hook
+//  Custom authentication hook
 export function useFirebase() {
-  const [user, setUser] = useState<string | null>(null);
-  const auth = getAuth();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (auth.currentUser) {
-      setUser(auth.currentUser.uid);
-    }
-  }, []);
+    //  Set an observer function to watch for user authentication
+    //  and set the state
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+      }
+    });
+
+    //  Clean up on component dismount
+    return () => unsubscribe();
+  }, [auth]);
 
   return {
     firebaseLogIn,
     firebaseCreateAccount,
     firebaseResetPassword,
     firebaseErrorToUserError,
-    user,
+    userId,
+    userDisplayName,
   };
 }
