@@ -111,7 +111,7 @@ export function InventoryTable({
                 //  For every item in the user's account, create an InventoyRecord
                 //  component onto the page
                 <InventoryRecord
-                  key={index}
+                  key={item.id}
                   itemName={item.itemName}
                   dateAdded={item.dateAdded}
                   quantity={item.quantity}

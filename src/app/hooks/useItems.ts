@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { useFirebase } from "./useFirebase";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
-//  This type represents the shape of the items the users
-//  can store into the database
 export type ItemData = {
   //  id is optional because it is auto generated
   id?: string;
@@ -18,6 +25,9 @@ export type ItemData = {
 //  Custom hook for interacting with item objects in
 //  the database
 export function useItems() {
+  //  This type represents the shape of the items the users
+  //  can store into the database
+
   //  State containing items loaded directly from the database
   const [serverItems, setServerItems] = useState<Array<ItemData> | null>(null);
 
@@ -54,7 +64,14 @@ export function useItems() {
       try {
         let querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          itemList.push(doc.data() as ItemData);
+          //  Store the item data in an object
+          let item = doc.data();
+
+          //  Attach the document id to the object
+          item.id = doc.id;
+
+          //  Add the item to the list
+          itemList.push(item as ItemData);
         });
         return itemList;
       } catch (error) {
@@ -84,8 +101,42 @@ export function useItems() {
     return null;
   }
 
+  async function deleteItem(item: ItemData) {
+    //  Ensure the user is authenticated
+    if (userId) {
+      try {
+        const docRef = doc(collection(db, "items"), item.id);
+        await deleteDoc(docRef);
+      } catch (error) {
+        //  If an error occurs, report it to the caller
+        console.error("Error getting documents: ", error);
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  async function updateItem(oldItem: ItemData, newItem: ItemData) {
+    //  Ensure the user is authenticated
+    if (userId) {
+      try {
+        const docRef = doc(collection(db, "items"), oldItem.id);
+        await updateDoc(docRef, newItem);
+      } catch (error) {
+        //  If an error occurs, report it to the caller
+        console.error("Error getting documents: ", error);
+        return null;
+      }
+    }
+
+    return null;
+  }
+
   return {
     serverItems,
     addItem,
+    deleteItem,
+    updateItem,
   };
 }

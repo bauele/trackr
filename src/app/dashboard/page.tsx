@@ -8,6 +8,8 @@ import { useFirebase } from "../hooks/useFirebase";
 import { useItems } from "../hooks/useItems";
 import { useRouter } from "next/navigation";
 
+import { ItemData } from "../hooks/useItems";
+
 export default function Dashboard() {
   //  The clientItems state holds what is currently loaded onto
   //  the dashboard
@@ -15,7 +17,7 @@ export default function Dashboard() {
 
   //  The serverItems value is the list of items loaded directly
   //  from the server
-  const { serverItems, addItem } = useItems();
+  const { serverItems, addItem, deleteItem, updateItem } = useItems();
 
   const { loading, userId, userDisplayName, firebaseSignOut } = useFirebase();
 
@@ -42,18 +44,24 @@ export default function Dashboard() {
     router.push("/");
   }
 
-  function onAddItem() {
-    //  Create a new item to be edited
-    let item = {
+  async function onAddItem() {
+    //  Create a new item to be added
+    let item: ItemData = {
       itemName: "New Item",
       dateAdded: "",
       quantity: "0",
       lastModified: "",
     };
 
-    addItem(item);
+    //  Create the record in the database, then assigned
+    //  the generated document id to the item object
+    let docId = await addItem(item);
+    if (docId) {
+      item.id = docId;
+    }
 
-    //  Create a copy of the current data
+    //  Create a new list of items, adding the new item
+    //  first and then including all the previous items
     let newItems = new Array<any>();
     newItems.push(item);
     newItems.push(...clientItems);
@@ -61,8 +69,11 @@ export default function Dashboard() {
   }
 
   function onDeleteItem(selectedRows: Array<number>) {
-    //  Filter the new list of items to only contain
-    //  the rows that are not selected
+    //  Delete every item that was selected
+    for (let i = 0; i < selectedRows.length; i++) {
+      deleteItem(clientItems[i]);
+    }
+
     let newItems = clientItems.filter(
       (value, index) => !selectedRows.includes(index)
     );
@@ -70,6 +81,9 @@ export default function Dashboard() {
   }
 
   function onRowUpdate(rowIndex: number, field: string, value: string) {
+    //  Copy the item being updated
+    let oldItem = clientItems[rowIndex];
+
     //  Create a copy of the current data
     let newItems = [...clientItems];
 
@@ -80,6 +94,9 @@ export default function Dashboard() {
     if (field === "itemName") {
       newItems[rowIndex].itemName = value;
     }
+
+    //  Update the item in the database
+    updateItem(oldItem, newItems[rowIndex]);
 
     //  Set the item list to the updated list
     setClientItems(newItems);
