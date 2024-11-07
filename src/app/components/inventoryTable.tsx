@@ -71,6 +71,7 @@ export function InventoryTable({
         >
           Add Item
         </button>
+
         <div className={styles.sort_controls}>
           <label htmlFor="sort">Sort By</label>
           <select name="sort" id="sort">
@@ -81,44 +82,54 @@ export function InventoryTable({
           </select>
         </div>
       </div>
-      <table className={styles.inventory_table}>
-        <tbody>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                //  The checked state of the checkbox should be determined by
-                //  the number of selected rows and not the user's direct input.
-                //  This checkbox should only show as checked if all rows are
-                //  currently selected.
-                checked={selectedRows.length === items.length}
-                onChange={toggleSelectAllRows}
-              />
-            </th>
 
-            <th>Item Name</th>
-            <th>Quantity</th>
-          </tr>
+      <>
+        {items.length === 0 && (
+          <p className={styles.no_items}>Add an item to get started.</p>
+        )}
+        {items.length !== 0 && (
+          <table className={styles.inventory_table}>
+            <tbody>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    //  The checked state of the checkbox should be determined by
+                    //  the number of selected rows and not the user's direct input.
+                    //  This checkbox should only show as checked if all rows are
+                    //  currently selected.
+                    checked={selectedRows.length === items.length}
+                    onChange={toggleSelectAllRows}
+                  />
+                </th>
 
-          {items?.map((item, index) => (
-            //  For every item in the user's account, create an InventoyRecord
-            //  component onto the page
-            <InventoryRecord
-              key={index}
-              itemName={item.itemName}
-              dateAdded={item.dateAdded}
-              quantity={item.quantity}
-              lastModified={item.lastModified}
-              //  The record's checkbox should show as checked if the row is selected
-              isSelected={selectedRows.includes(index)}
-              //  If the user checks the row, this component should handle the process
-              //  of selecting that row
-              onSelect={() => toggleSelectRow(index)}
-              onRowUpdate={(field, value) => onRowUpdate(index, field, value)}
-            />
-          ))}
-        </tbody>
-      </table>
+                <th>Item Name</th>
+                <th>Quantity</th>
+              </tr>
+
+              {items?.map((item, index) => (
+                //  For every item in the user's account, create an InventoyRecord
+                //  component onto the page
+                <InventoryRecord
+                  key={index}
+                  itemName={item.itemName}
+                  dateAdded={item.dateAdded}
+                  quantity={item.quantity}
+                  lastModified={item.lastModified}
+                  //  The record's checkbox should show as checked if the row is selected
+                  isSelected={selectedRows.includes(index)}
+                  //  If the user checks the row, this component should handle the process
+                  //  of selecting that row
+                  onSelect={() => toggleSelectRow(index)}
+                  onRowUpdate={(field, value) =>
+                    onRowUpdate(index, field, value)
+                  }
+                />
+              ))}
+            </tbody>
+          </table>
+        )}
+      </>
 
       <div
         className={classNames(
@@ -129,7 +140,13 @@ export function InventoryTable({
       >
         <button
           className={classNames("button", "button-pad", styles.delete_button)}
-          onClick={() => onDeleteItem(selectedRows)}
+          onClick={() => {
+            //  Perform the delete callback
+            onDeleteItem(selectedRows);
+
+            //  Set the state to no longer contain any selected rows
+            setSelectedRows([]);
+          }}
         >
           Delete
         </button>

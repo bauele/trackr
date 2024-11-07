@@ -66,6 +66,10 @@
   animation-fill-mode: forwards;
 }
 
+.no_items {
+  align-self: center;
+}
+
 /* The animation code */
 @keyframes float_in {
   from {
