@@ -140,6 +140,7 @@ function firebaseErrorToUserError(error: string) {
 //  Custom authentication hook
 export function useFirebase() {
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -153,6 +154,8 @@ export function useFirebase() {
         setUserId(null);
         setUserDisplayName(null);
       }
+
+      setLoading(false);
     });
 
     //  Clean up on component dismount
@@ -167,5 +170,6 @@ export function useFirebase() {
     firebaseErrorToUserError,
     userId,
     userDisplayName,
+    loading,
   };
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFirebase } from "./useFirebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 //  This type represents the shape of the items the users
@@ -8,8 +8,9 @@ import { db } from "../../firebase/firebase";
 export type ItemData = {
   //  id is optional because it is auto generated
   id?: string;
+  userId?: string;
   itemName: string;
-  quantity: number;
+  quantity: string;
   dateAdded: string;
   lastModified: string;
 };
@@ -40,7 +41,7 @@ export function useItems() {
 
   //  GET: all items from server
   async function getAllItems() {
-    //  Ensure the user is authentication
+    //  Ensure the user is authenticated
     if (userId) {
       //  Build a query to find all matching documents with the
       //  user's userId
@@ -66,7 +67,25 @@ export function useItems() {
     return null;
   }
 
+  async function addItem(item: ItemData) {
+    //  Ensure the user is authenticated
+    if (userId) {
+      try {
+        item.userId = userId;
+        const docRef = await addDoc(collection(db, "items"), item);
+        return docRef.id;
+      } catch (error) {
+        //  If an error occurs, report it to the caller
+        console.error("Error getting documents: ", error);
+        return null;
+      }
+    }
+
+    return null;
+  }
+
   return {
     serverItems,
+    addItem,
   };
 }

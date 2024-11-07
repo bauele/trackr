@@ -6,7 +6,6 @@ import classNames from "classnames";
 import { InventoryTable } from "../components/inventoryTable";
 import { useFirebase } from "../hooks/useFirebase";
 import { useItems } from "../hooks/useItems";
-import { sign } from "crypto";
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
@@ -16,19 +15,19 @@ export default function Dashboard() {
 
   //  The serverItems value is the list of items loaded directly
   //  from the server
-  const { serverItems } = useItems();
+  const { serverItems, addItem } = useItems();
 
-  const { userId, userDisplayName, firebaseSignOut } = useFirebase();
+  const { loading, userId, userDisplayName, firebaseSignOut } = useFirebase();
 
   const router = useRouter();
 
   //  Redirect user back to log in page if they are not
   //  authenticated
   useEffect(() => {
-    if (userId === null) {
-      //router.push("/");
+    if (!loading && userId === null) {
+      router.push("/");
     }
-  }, [userId]);
+  }, [userId, loading]);
 
   //  On page load, retrieve all items from the server and
   //  set the page to display them
@@ -51,6 +50,8 @@ export default function Dashboard() {
       quantity: "0",
       lastModified: "",
     };
+
+    addItem(item);
 
     //  Create a copy of the current data
     let newItems = new Array<any>();
@@ -88,7 +89,7 @@ export default function Dashboard() {
     <>
       {
         //  Avoid rendering page content if user is not authenticated
-        userId !== null && (
+        !loading && userId !== null && (
           <div className={styles.page_container}>
             <div className={styles.content_container}>
               <div className={styles.page_upper_container}>

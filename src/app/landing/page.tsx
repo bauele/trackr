@@ -20,57 +20,73 @@ enum PAGE_STATE {
 }
 
 export default function Landing() {
-  const { userId } = useFirebase();
+  const { userId, loading } = useFirebase();
+  const [redirect, setRedirect] = useState(false);
   const router = useRouter();
 
   const [pageState, setPageState] = useState(PAGE_STATE.LOG_IN);
 
   useEffect(() => {
-    console.log(userId);
     if (userId !== null) {
+      setRedirect(true);
       router.push("/dashboard");
+    } else {
+      setRedirect(false);
     }
   }, [userId]);
 
   return (
-    <div className={classNames(styles.page_container, styles.letter_spacing)}>
-      <h1>Trackr</h1>
-      <div className={styles.content_container}>
+    <>
+      {!loading && !redirect && (
         <div
-          className={classNames(styles.cta_container, styles.letter_spacing)}
+          className={classNames(styles.page_container, styles.letter_spacing)}
         >
-          <h2>Inventory management anytime, anywhere.</h2>
-          <p>
-            Join the thousands of users that are transforming the way they track
-            their stuff.
-          </p>
-        </div>
+          <h1>Trackr</h1>
+          <div className={styles.content_container}>
+            <div
+              className={classNames(
+                styles.cta_container,
+                styles.letter_spacing
+              )}
+            >
+              <h2>Inventory management anytime, anywhere.</h2>
+              <p>
+                Join the thousands of users that are transforming the way they
+                track their stuff.
+              </p>
+            </div>
 
-        <div className={styles.state_action_container}>
-          {pageState === PAGE_STATE.LOG_IN && (
-            <Login
-              onCreateAccount={() => setPageState(PAGE_STATE.CREATE_ACCOUNT)}
-              onForgotPassword={() => setPageState(PAGE_STATE.RESET_PASSWORD)}
-              onLogInSuccess={() => router?.push("/dashboard")}
-            />
-          )}
-          {pageState === PAGE_STATE.CREATE_ACCOUNT && (
-            <CreateAccount
-              onBackToLogIn={() => setPageState(PAGE_STATE.LOG_IN)}
-              onCreateAccountSuccess={() => router?.push("/dashboard")}
-            />
-          )}
-          {pageState === PAGE_STATE.RESET_PASSWORD && (
-            <ResetPassword
-              onBackToLogIn={() => setPageState(PAGE_STATE.LOG_IN)}
-            />
-          )}
+            <div className={styles.state_action_container}>
+              {pageState === PAGE_STATE.LOG_IN && (
+                <Login
+                  onCreateAccount={() =>
+                    setPageState(PAGE_STATE.CREATE_ACCOUNT)
+                  }
+                  onForgotPassword={() =>
+                    setPageState(PAGE_STATE.RESET_PASSWORD)
+                  }
+                  onLogInSuccess={() => router?.push("/dashboard")}
+                />
+              )}
+              {pageState === PAGE_STATE.CREATE_ACCOUNT && (
+                <CreateAccount
+                  onBackToLogIn={() => setPageState(PAGE_STATE.LOG_IN)}
+                  onCreateAccountSuccess={() => router?.push("/dashboard")}
+                />
+              )}
+              {pageState === PAGE_STATE.RESET_PASSWORD && (
+                <ResetPassword
+                  onBackToLogIn={() => setPageState(PAGE_STATE.LOG_IN)}
+                />
+              )}
+            </div>
+          </div>
+          <div className={classNames(styles.footer, styles.letter_spacing)}>
+            <p>Terms of Service</p>
+            <p>Privacy Policy</p>
+          </div>
         </div>
-      </div>
-      <div className={classNames(styles.footer, styles.letter_spacing)}>
-        <p>Terms of Service</p>
-        <p>Privacy Policy</p>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
