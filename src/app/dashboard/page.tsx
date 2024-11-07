@@ -18,7 +18,7 @@ export default function Dashboard() {
   //  from the server
   const { serverItems } = useItems();
 
-  const { userId, firebaseSignOut } = useFirebase();
+  const { userId, userDisplayName, firebaseSignOut } = useFirebase();
 
   const router = useRouter();
 
@@ -26,6 +26,7 @@ export default function Dashboard() {
   //  authenticated
   useEffect(() => {
     if (userId === null) {
+      //router.push("/");
     }
   }, [userId]);
 
@@ -93,7 +94,7 @@ export default function Dashboard() {
               <div className={styles.page_upper_container}>
                 <div className={styles.heading_container}>
                   <div className={styles.heading_content}>
-                    <h1>{userId} Inventory</h1>
+                    <h1>{userDisplayName}'s Inventory</h1>
                     <h2>Last Modified: Today</h2>
                   </div>
                   <div>

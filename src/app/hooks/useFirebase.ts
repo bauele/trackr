@@ -7,6 +7,7 @@ import {
   sendPasswordResetEmail,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 
@@ -34,9 +35,23 @@ async function firebaseLogIn(email: string, password: string) {
 //  Creates a user account on the service
 //  If successful, returns success indicator
 //  Otherwise, returns an error code
-async function firebaseCreateAccount(email: string, password: string) {
+async function firebaseCreateAccount(
+  email: string,
+  password: string,
+  displayName: string
+) {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    await updateProfile(user, {
+      displayName: displayName,
+    });
+
     return "success";
   } catch (error) {
     //  A Firebase-specific error occured, such as an email email or password
@@ -133,8 +148,10 @@ export function useFirebase() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserId(user.uid);
+        setUserDisplayName(user.displayName);
       } else {
         setUserId(null);
+        setUserDisplayName(null);
       }
     });
 

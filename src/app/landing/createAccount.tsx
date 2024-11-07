@@ -35,8 +35,7 @@ export default function CreateAccount({
       return;
     }
 
-    console.log(`Email: ${email} Password: ${password}`);
-    let result = await firebaseCreateAccount(email, password);
+    let result = await firebaseCreateAccount(email, password, displayName);
     result = result?.trim();
     console.log(result);
 
