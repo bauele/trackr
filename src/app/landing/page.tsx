@@ -3,11 +3,12 @@
 import styles from "./landingStyles.module.css";
 import classNames from "classnames";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./login";
 import CreateAccount from "./createAccount";
 import { useRouter } from "next/navigation";
 import ResetPassword from "./resetPassword";
+import { useFirebase } from "../hooks/useFirebase";
 
 //  An enum to determine what the user is doing
 //  on the page. They are either attempting to log in,
@@ -19,9 +20,17 @@ enum PAGE_STATE {
 }
 
 export default function Landing() {
+  const { userId } = useFirebase();
   const router = useRouter();
 
   const [pageState, setPageState] = useState(PAGE_STATE.LOG_IN);
+
+  useEffect(() => {
+    console.log(userId);
+    if (userId !== null) {
+      router.push("/dashboard");
+    }
+  }, [userId]);
 
   return (
     <div className={classNames(styles.page_container, styles.letter_spacing)}>

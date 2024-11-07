@@ -1,12 +1,11 @@
-import { initializeApp, FirebaseError } from "firebase/app";
-import { app } from "../../firebase/firebase";
+import { FirebaseError } from "firebase/app";
 import { auth } from "../../firebase/firebase";
 
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  signOut,
   onAuthStateChanged,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
@@ -58,7 +57,7 @@ async function firebaseCreateAccount(email: string, password: string) {
 //  Otherwise, returns an error code
 async function firebaseResetPassword(email: string) {
   try {
-    let result = await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth, email);
     return "success";
   } catch (error) {
     if (error instanceof FirebaseError) {
@@ -70,6 +69,18 @@ async function firebaseResetPassword(email: string) {
   }
 }
 
+async function firebaseSignOut() {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      let errorCode = error.code;
+      return errorCode;
+    } else {
+      return "";
+    }
+  }
+}
 //  Maps a Firebase-specific error code to a user friendly string
 //  If error is not Firebase-specific, returns a generic error
 function firebaseErrorToUserError(error: string) {
@@ -135,6 +146,7 @@ export function useFirebase() {
     firebaseLogIn,
     firebaseCreateAccount,
     firebaseResetPassword,
+    firebaseSignOut,
     firebaseErrorToUserError,
     userId,
     userDisplayName,

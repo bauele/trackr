@@ -6,6 +6,8 @@ import classNames from "classnames";
 import { InventoryTable } from "../components/inventoryTable";
 import { useFirebase } from "../hooks/useFirebase";
 import { useItems } from "../hooks/useItems";
+import { sign } from "crypto";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   //  The clientItems state holds what is currently loaded onto
@@ -16,7 +18,16 @@ export default function Dashboard() {
   //  from the server
   const { serverItems } = useItems();
 
-  const { userId } = useFirebase();
+  const { userId, firebaseSignOut } = useFirebase();
+
+  const router = useRouter();
+
+  //  Redirect user back to log in page if they are not
+  //  authenticated
+  useEffect(() => {
+    if (userId === null) {
+    }
+  }, [userId]);
 
   //  On page load, retrieve all items from the server and
   //  set the page to display them
@@ -25,6 +36,11 @@ export default function Dashboard() {
       setClientItems(serverItems);
     }
   }, [serverItems]);
+
+  function signOut() {
+    firebaseSignOut();
+    router.push("/");
+  }
 
   function onAddItem() {
     //  Create a new item to be edited
@@ -68,37 +84,45 @@ export default function Dashboard() {
   }
 
   return (
-    <div className={styles.page_container}>
-      <div className={styles.content_container}>
-        <div className={styles.page_upper_container}>
-          <div className={styles.heading_container}>
-            <div className={styles.heading_content}>
-              <h1>{userId} Inventory</h1>
-              <h2>Last Modified: Today</h2>
-            </div>
-            <div>
-              <button
-                className={classNames(
-                  "button",
-                  "bg-pink",
-                  "button-pad",
-                  styles.button
-                )}
-              >
-                Log Out
-              </button>
+    <>
+      {
+        //  Avoid rendering page content if user is not authenticated
+        userId !== null && (
+          <div className={styles.page_container}>
+            <div className={styles.content_container}>
+              <div className={styles.page_upper_container}>
+                <div className={styles.heading_container}>
+                  <div className={styles.heading_content}>
+                    <h1>{userId} Inventory</h1>
+                    <h2>Last Modified: Today</h2>
+                  </div>
+                  <div>
+                    <button
+                      className={classNames(
+                        "button",
+                        "bg-pink",
+                        "button-pad",
+                        styles.button
+                      )}
+                      onClick={signOut}
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <InventoryTable
+                items={clientItems}
+                onAddItem={() => onAddItem()}
+                onDeleteItem={(selectedRows) => onDeleteItem(selectedRows)}
+                onRowUpdate={(index, field, value) =>
+                  onRowUpdate(index, field, value)
+                }
+              />
             </div>
           </div>
-        </div>
-        <InventoryTable
-          items={clientItems}
-          onAddItem={() => onAddItem()}
-          onDeleteItem={(selectedRows) => onDeleteItem(selectedRows)}
-          onRowUpdate={(index, field, value) =>
-            onRowUpdate(index, field, value)
-          }
-        />
-      </div>
-    </div>
+        )
+      }
+    </>
   );
 }
