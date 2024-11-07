@@ -24,17 +24,14 @@ export default function Login({
   const { userId, firebaseLogIn, firebaseErrorToUserError } = useFirebase();
 
   async function logIn() {
-    console.log(`Email: ${email} Password: ${password}`);
     let result = await firebaseLogIn(email, password);
     result = result?.trim();
-    console.log(result);
 
     //  Map the error code to a user-friendly error message
     if (result === "success") {
       onLogInSuccess();
     } else {
       let error = firebaseErrorToUserError(result);
-      console.log(error);
       setLastError(error);
     }
   }

@@ -18,7 +18,6 @@ export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
   async function resetPassword() {
     let result = await firebaseResetPassword(email);
     result = result?.trim();
-    console.log(result);
 
     //  Map the error code to a user-friendly error message
     if (result === "success") {
@@ -27,7 +26,6 @@ export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
       );
     } else {
       let error = firebaseErrorToUserError(result);
-      console.log(error);
       setLastError(error);
     }
   }

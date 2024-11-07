@@ -37,14 +37,12 @@ export default function CreateAccount({
 
     let result = await firebaseCreateAccount(email, password, displayName);
     result = result?.trim();
-    console.log(result);
 
     //  Map the error code to a user-friendly error message
     if (result === "success") {
       onCreateAccountSuccess();
     } else {
       let error = firebaseErrorToUserError(result);
-      console.log(error);
       setLastError(error);
     }
   }

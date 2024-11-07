@@ -139,6 +139,7 @@ function firebaseErrorToUserError(error: string) {
 
 //  Custom authentication hook
 export function useFirebase() {
+  const [user, setUser] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
@@ -146,8 +147,9 @@ export function useFirebase() {
   useEffect(() => {
     //  Set an observer function to watch for user authentication
     //  and set the state
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        await user.reload();
         setUserId(user.uid);
         setUserDisplayName(user.displayName);
       } else {
