@@ -1,4 +1,6 @@
 import { initializeApp, FirebaseError } from "firebase/app";
+import { app } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 
 import {
   getAuth,
@@ -6,35 +8,12 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-
-//  Firebase web app configuration
-//  In a real life production environment, these values would
-//  be kept outside of source control
-const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
-const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
-const storageBucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
-const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID;
-const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
-
-const firebaseConfig = {
-  apiKey: apiKey,
-  authDomain: authDomain,
-  projectId: projectId,
-  storageBucket: storageBucket,
-  messagingSenderId: messagingSenderId,
-  appId: appId,
-};
-
-//  Initial the firebase configuration
-const app = initializeApp(firebaseConfig);
+import { useEffect, useState } from "react";
 
 //  Logs a user into the service
 //  If successful, returns the auth token for the user
 //  Otherwise, returns an error code
-export async function firebaseLogIn(email: string, password: string) {
-  const auth = getAuth();
-
+async function firebaseLogIn(email: string, password: string) {
   try {
     let credentials = await signInWithEmailAndPassword(auth, email, password);
     console.log(credentials);
@@ -53,9 +32,7 @@ export async function firebaseLogIn(email: string, password: string) {
   }
 }
 
-export async function firebaseCreateAccount(email: string, password: string) {
-  const auth = getAuth();
-
+async function firebaseCreateAccount(email: string, password: string) {
   try {
     let credentials = await createUserWithEmailAndPassword(
       auth,
@@ -77,7 +54,7 @@ export async function firebaseCreateAccount(email: string, password: string) {
   }
 }
 
-export async function firebaseResetPassword(email: string) {
+async function firebaseResetPassword(email: string) {
   const auth = getAuth();
   try {
     let result = await sendPasswordResetEmail(auth, email);
@@ -92,7 +69,7 @@ export async function firebaseResetPassword(email: string) {
   }
 }
 
-export function firebaseErrorToUserError(error: string) {
+function firebaseErrorToUserError(error: string) {
   let errorMessage = "";
 
   switch (error) {
@@ -129,4 +106,24 @@ export function firebaseErrorToUserError(error: string) {
   }
 
   return errorMessage;
+}
+
+//  Custom hook
+export function useFirebase() {
+  const [user, setUser] = useState<string | null>(null);
+  const auth = getAuth();
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      setUser(auth.currentUser.uid);
+    }
+  }, []);
+
+  return {
+    firebaseLogIn,
+    firebaseCreateAccount,
+    firebaseResetPassword,
+    firebaseErrorToUserError,
+    user,
+  };
 }

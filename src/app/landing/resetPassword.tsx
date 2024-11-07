@@ -3,10 +3,7 @@
 import styles from "./landingStyles.module.css";
 import classNames from "classnames";
 
-import {
-  firebaseResetPassword,
-  firebaseErrorToUserError,
-} from "../api/firebase/route";
+import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
 interface CreateAccountProps {
@@ -16,6 +13,7 @@ interface CreateAccountProps {
 export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
   const [email, setEmail] = useState("");
   const [lastError, setLastError] = useState("");
+  const { firebaseResetPassword, firebaseErrorToUserError } = useFirebase();
 
   async function resetPassword() {
     let result = await firebaseResetPassword(email);

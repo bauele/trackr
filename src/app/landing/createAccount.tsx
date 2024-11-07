@@ -3,10 +3,7 @@
 import styles from "./landingStyles.module.css";
 import classNames from "classnames";
 
-import {
-  firebaseCreateAccount,
-  firebaseErrorToUserError,
-} from "../api/firebase/route";
+import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
 interface CreateAccountProps {
@@ -23,6 +20,8 @@ export default function CreateAccount({
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [lastError, setLastError] = useState("");
+
+  const { firebaseCreateAccount, firebaseErrorToUserError } = useFirebase();
 
   async function createAccount() {
     if (displayName === "") {

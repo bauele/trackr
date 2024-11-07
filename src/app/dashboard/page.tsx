@@ -7,8 +7,13 @@ import { InventoryTable } from "../components/inventoryTable";
 
 import { useEffect, useState } from "react";
 
+import { useFirebase } from "../hooks/useFirebase";
+import { useItems } from "../hooks/useItems";
+
 export default function Dashboard() {
   const [items, setItems] = useState<Array<any>>([]);
+  const { user } = useFirebase();
+  const { hookItems } = useItems();
 
   useEffect(() => {
     //  Load dummy data
@@ -35,6 +40,10 @@ export default function Dashboard() {
 
     setItems(data);
   }, []);
+
+  useEffect(() => {
+    console.log("hookitems = ", hookItems);
+  }, [hookItems]);
 
   function onAddItem() {
     //  Create a new item to be edited
@@ -84,7 +93,7 @@ export default function Dashboard() {
         <div className={styles.page_upper_container}>
           <div className={styles.heading_container}>
             <div className={styles.heading_content}>
-              <h1>Kyle's Inventory</h1>
+              <h1>{user} Inventory</h1>
               <h2>Last Modified: Today</h2>
             </div>
             <div>

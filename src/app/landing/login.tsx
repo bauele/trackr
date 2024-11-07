@@ -3,7 +3,7 @@
 import styles from "./landingStyles.module.css";
 import classNames from "classnames";
 
-import { firebaseLogIn, firebaseErrorToUserError } from "../api/firebase/route";
+import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
 interface LoginProps {
@@ -20,6 +20,8 @@ export default function Login({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [lastError, setLastError] = useState("");
+
+  const { user, firebaseLogIn, firebaseErrorToUserError } = useFirebase();
 
   async function logIn() {
     console.log(`Email: ${email} Password: ${password}`);
