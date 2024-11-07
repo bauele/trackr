@@ -45,6 +45,27 @@ export default function Dashboard() {
     router.push("/");
   }
 
+  function onSortItems(sortOption: string) {
+    //  Create a copy of the items to use later
+    let sortedItems = [...clientItems];
+
+    if (sortOption === "quantity_asc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        const quantityA = Number(a.quantity);
+        const quantityB = Number(b.quantity);
+        return quantityA - quantityB;
+      });
+    } else if (sortOption === "quantity_dsc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        const quantityA = Number(a.quantity);
+        const quantityB = Number(b.quantity);
+        return quantityB - quantityA;
+      });
+    }
+
+    setClientItems(sortedItems);
+  }
+
   async function onAddItem() {
     //  Create a new item to be added
     let item = buildItem();
@@ -133,6 +154,7 @@ export default function Dashboard() {
                 onRowUpdate={(index, field, value) =>
                   onRowUpdate(index, field, value)
                 }
+                onSortTable={onSortItems}
               />
             </div>
           </div>

@@ -4,12 +4,14 @@ import classNames from "classnames";
 import { InventoryRecord } from "./inventoryRecord";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Timestamp } from "firebase-admin/firestore";
+import { ItemData } from "../hooks/useItems";
 
 interface InventoryTableProps {
-  items: Array<any>; //  TODO: Change this to be of the model type
+  items: Array<ItemData>;
   onAddItem: () => void;
   onDeleteItem: (selectedRows: Array<number>) => void;
   onRowUpdate: (rowIndex: number, field: string, value: string) => void;
+  onSortTable: (sortOption: string) => void;
 }
 
 //  This component represent a table of inventory records. It will
@@ -20,8 +22,11 @@ export function InventoryTable({
   onAddItem,
   onDeleteItem,
   onRowUpdate,
+  onSortTable,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<Array<number>>([]);
+
+  useEffect(() => {}, [items]);
 
   //  Add or remove a selected row
   const toggleSelectRow = (rowIndex: number) => {
@@ -60,17 +65,7 @@ export function InventoryTable({
 
   function sortTable(event: ChangeEvent<HTMLSelectElement>) {
     let sortOption = event.target.value;
-
-    switch (sortOption) {
-      case "date_added":
-        break;
-      case "item_name":
-        break;
-      case "quantity":
-        break;
-      case "last_modified":
-        break;
-    }
+    onSortTable(sortOption);
   }
 
   function convertTimestamp(timestamp: Timestamp) {
@@ -110,10 +105,14 @@ export function InventoryTable({
         <div className={styles.sort_controls}>
           <label htmlFor="sort">Sort By</label>
           <select name="sort" id="sort" onChange={(event) => sortTable(event)}>
-            <option value="date_added">Date Added</option>
-            <option value="item_name">Item Name</option>
-            <option value="quantity">Quantity</option>
-            <option value="last_modified">Last Modified</option>
+            <option value="date_added_asc">Date Added Asc.</option>
+            <option value="date_added_dsc">Date Added Dsc.</option>
+            <option value="item_name_asc">Item Name Asc.</option>
+            <option value="item_name_dsc">Item Name Dsc.</option>
+            <option value="quantity_asc">Quantity Asc.</option>
+            <option value="quantity_dsc">Quantity Desc.</option>
+            <option value="last_modified_asc">Last Modified Asc.</option>
+            <option value="last_modified_dsc">Last Modified Dsc.</option>
           </select>
         </div>
       </div>
