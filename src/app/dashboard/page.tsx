@@ -17,7 +17,8 @@ export default function Dashboard() {
 
   //  The serverItems value is the list of items loaded directly
   //  from the server
-  const { serverItems, addItem, deleteItem, updateItem } = useItems();
+  const { serverItems, buildItem, addItem, deleteItem, updateItem } =
+    useItems();
 
   const { loading, userId, userDisplayName, firebaseSignOut } = useFirebase();
 
@@ -46,17 +47,12 @@ export default function Dashboard() {
 
   async function onAddItem() {
     //  Create a new item to be added
-    let item: ItemData = {
-      itemName: "New Item",
-      dateAdded: "",
-      quantity: "0",
-      lastModified: "",
-    };
+    let item = buildItem();
 
     //  Create the record in the database, then assigned
     //  the generated document id to the item object
     let docId = await addItem(item);
-    if (docId) {
+    if (docId !== null) {
       item.id = docId;
     }
 

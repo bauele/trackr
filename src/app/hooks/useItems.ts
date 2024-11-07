@@ -7,6 +7,7 @@ import {
   doc,
   getDocs,
   query,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -14,12 +15,12 @@ import { db } from "../../firebase/firebase";
 
 export type ItemData = {
   //  id is optional because it is auto generated
-  id?: string;
-  userId?: string;
+  id: string | null;
+  userId: string | null;
   itemName: string;
   quantity: string;
-  dateAdded: string;
-  lastModified: string;
+  dateAdded: Timestamp;
+  lastModified: Timestamp;
 };
 
 //  Custom hook for interacting with item objects in
@@ -48,6 +49,19 @@ export function useItems() {
 
     fetchData();
   }, [userId]);
+
+  function buildItem() {
+    let item = {
+      id: null,
+      userId: null,
+      itemName: "New Item",
+      quantity: "0",
+      dateAdded: Timestamp.fromDate(new Date()),
+      lastModified: Timestamp.fromDate(new Date()),
+    } as ItemData;
+
+    return item;
+  }
 
   //  GET: all items from server
   async function getAllItems() {
@@ -89,6 +103,7 @@ export function useItems() {
     if (userId) {
       try {
         item.userId = userId;
+
         const docRef = await addDoc(collection(db, "items"), item);
         return docRef.id;
       } catch (error) {
@@ -103,7 +118,7 @@ export function useItems() {
 
   async function deleteItem(item: ItemData) {
     //  Ensure the user is authenticated
-    if (userId) {
+    if (userId && item.id) {
       try {
         const docRef = doc(collection(db, "items"), item.id);
         await deleteDoc(docRef);
@@ -119,10 +134,11 @@ export function useItems() {
 
   async function updateItem(oldItem: ItemData, newItem: ItemData) {
     //  Ensure the user is authenticated
-    if (userId) {
+    if (userId && newItem.id && oldItem.id) {
       try {
         const docRef = doc(collection(db, "items"), oldItem.id);
-        await updateDoc(docRef, newItem);
+        (newItem.lastModified = Timestamp.fromDate(new Date())),
+          await updateDoc(docRef, newItem);
       } catch (error) {
         //  If an error occurs, report it to the caller
         console.error("Error getting documents: ", error);
@@ -135,6 +151,7 @@ export function useItems() {
 
   return {
     serverItems,
+    buildItem,
     addItem,
     deleteItem,
     updateItem,

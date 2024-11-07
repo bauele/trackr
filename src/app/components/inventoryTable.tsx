@@ -2,7 +2,8 @@ import styles from "./inventoryTableStyles.module.css";
 import classNames from "classnames";
 
 import { InventoryRecord } from "./inventoryRecord";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
+import { Timestamp } from "firebase-admin/firestore";
 
 interface InventoryTableProps {
   items: Array<any>; //  TODO: Change this to be of the model type
@@ -57,6 +58,40 @@ export function InventoryTable({
     setSelectedRows(newSelectedRows);
   }
 
+  function sortTable(event: ChangeEvent<HTMLSelectElement>) {
+    let sortOption = event.target.value;
+
+    switch (sortOption) {
+      case "date_added":
+        break;
+      case "item_name":
+        break;
+      case "quantity":
+        break;
+      case "last_modified":
+        break;
+    }
+  }
+
+  function convertTimestamp(timestamp: Timestamp) {
+    let date = timestamp.toDate();
+    const now = new Date();
+
+    const sameDay =
+      date.getFullYear() === now.getFullYear() &&
+      date.getMonth() === now.getMonth() &&
+      date.getDate() === now.getDate();
+
+    if (sameDay) {
+      return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } else {
+      return date.toLocaleDateString("en-US");
+    }
+  }
+
   return (
     <>
       <div className={styles.inventory_table_controls}>
@@ -74,7 +109,7 @@ export function InventoryTable({
 
         <div className={styles.sort_controls}>
           <label htmlFor="sort">Sort By</label>
-          <select name="sort" id="sort">
+          <select name="sort" id="sort" onChange={(event) => sortTable(event)}>
             <option value="date_added">Date Added</option>
             <option value="item_name">Item Name</option>
             <option value="quantity">Quantity</option>
@@ -113,9 +148,9 @@ export function InventoryTable({
                 <InventoryRecord
                   key={item.id}
                   itemName={item.itemName}
-                  dateAdded={item.dateAdded}
+                  dateAdded={convertTimestamp(item.dateAdded)}
                   quantity={item.quantity}
-                  lastModified={item.lastModified}
+                  lastModified={convertTimestamp(item.lastModified)}
                   //  The record's checkbox should show as checked if the row is selected
                   isSelected={selectedRows.includes(index)}
                   //  If the user checks the row, this component should handle the process
