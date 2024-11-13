@@ -8,7 +8,7 @@ import { ItemData } from "../hooks/useItems";
 
 interface InventoryTableProps {
   items: Array<ItemData>;
-  onAddItem: () => void;
+  onAddItem: () => Promise<string | null>;
   onDeleteItem: (selectedRows: Array<number>) => void;
   onRowUpdate: (rowIndex: number, field: string, value: string) => void;
   onSortTable: (sortOption: string) => void;
@@ -24,8 +24,11 @@ export function InventoryTable({
   onRowUpdate,
   onSortTable,
 }: InventoryTableProps) {
-  const [selectedRows, setSelectedRows] = useState<Array<number>>([]);
+  const [selectedRows, setSelectedRows] = useState<Array<number> | null>([]);
   const [newRecordAdded, setNewRecordAdded] = useState(false);
+  const [recentlyAddedItem, setRecentlyAddedItem] = useState<
+    string | undefined | null
+  >(undefined);
   const prevItems = useRef(items);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export function InventoryTable({
   //  Add or remove a selected row
   const toggleSelectRow = (rowIndex: number) => {
     //  If the row is already select it, unselect it
-    if (selectedRows.includes(rowIndex)) {
+    if (selectedRows?.includes(rowIndex)) {
       setSelectedRows(
         selectedRows.filter((rowNumber) => rowNumber !== rowIndex)
       );
@@ -58,7 +61,9 @@ export function InventoryTable({
 
     //  Otherwise, do select it
     else {
-      setSelectedRows([...selectedRows, rowIndex]);
+      if (selectedRows) {
+        setSelectedRows([...selectedRows, rowIndex]);
+      }
     }
   };
 
@@ -69,17 +74,19 @@ export function InventoryTable({
   function toggleSelectAllRows() {
     //  Create a new array to contain the new rows to be selected
     let newSelectedRows = Array<number>();
-    if (
-      selectedRows.length === 0 ||
-      (selectedRows.length > 0 && selectedRows.length !== items.length)
-    ) {
-      for (let i = 0; i < items.length; i++) {
-        newSelectedRows.push(i);
+    if (selectedRows) {
+      if (
+        selectedRows.length === 0 ||
+        (selectedRows.length > 0 && selectedRows.length !== items.length)
+      ) {
+        for (let i = 0; i < items.length; i++) {
+          newSelectedRows.push(i);
+        }
       }
-    }
 
-    //  Update the list of selected rows
-    setSelectedRows(newSelectedRows);
+      //  Update the list of selected rows
+      setSelectedRows(newSelectedRows);
+    }
   }
 
   function sortTable(event: ChangeEvent<HTMLSelectElement>) {
@@ -108,8 +115,10 @@ export function InventoryTable({
 
   function onKeyDown(event: any) {
     if (event.key === "Delete") {
-      onDeleteItem(selectedRows);
-      setSelectedRows([]);
+      if (selectedRows) {
+        onDeleteItem(selectedRows);
+        setSelectedRows([]);
+      }
     }
   }
 
@@ -123,7 +132,11 @@ export function InventoryTable({
             "button-pad",
             styles.button
           )}
-          onClick={() => onAddItem()}
+          onClick={() =>
+            onAddItem().then((id) => {
+              setRecentlyAddedItem(id);
+            })
+          }
         >
           Add Item
         </button>
@@ -163,7 +176,7 @@ export function InventoryTable({
                     //  the number of selected rows and not the user's direct input.
                     //  This checkbox should only show as checked if all rows are
                     //  currently selected.
-                    checked={selectedRows.length === items.length}
+                    checked={selectedRows?.length === items.length}
                     onChange={toggleSelectAllRows}
                     onKeyDown={(event) => onKeyDown(event)}
                   />
@@ -183,15 +196,16 @@ export function InventoryTable({
                   quantity={item.quantity}
                   lastModified={convertTimestamp(item.lastModified)}
                   //  The record's checkbox should show as checked if the row is selected
-                  isSelected={selectedRows.includes(index)}
-                  newRecord={index == 0 && newRecordAdded ? true : false}
+                  isSelected={selectedRows?.includes(index) ?? false}
+                  newRecord={item.id === recentlyAddedItem}
                   //  If the user checks the row, this component should handle the process
                   //  of selecting that row
                   onSelect={() => toggleSelectRow(index)}
                   onKeyDown={(event) => onKeyDown(event)}
-                  onRowUpdate={(field, value) =>
-                    onRowUpdate(index, field, value)
-                  }
+                  onRowUpdate={(field, value) => {
+                    setRecentlyAddedItem(null);
+                    onRowUpdate(index, field, value);
+                  }}
                 />
               ))}
             </tbody>
@@ -202,15 +216,18 @@ export function InventoryTable({
       <div
         className={classNames(
           styles.floating_bar,
-          selectedRows.length > 0 && styles.float_in,
-          selectedRows.length === 0 && styles.float_out
+          !selectedRows && styles.float_none,
+          selectedRows && selectedRows.length > 0 && styles.float_in,
+          selectedRows && selectedRows.length === 0 && styles.float_out
         )}
       >
         <button
           className={classNames("button", "button-pad", styles.delete_button)}
           onClick={() => {
             //  Perform the delete callback
-            onDeleteItem(selectedRows);
+            if (selectedRows) {
+              onDeleteItem(selectedRows);
+            }
 
             //  Set the state to no longer contain any selected rows
             setSelectedRows([]);

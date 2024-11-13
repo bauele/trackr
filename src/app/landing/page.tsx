@@ -21,23 +21,19 @@ enum PAGE_STATE {
 
 export default function Landing() {
   const { userId, loading } = useFirebase();
-  const [redirect, setRedirect] = useState(false);
   const router = useRouter();
 
   const [pageState, setPageState] = useState(PAGE_STATE.LOG_IN);
 
   useEffect(() => {
     if (userId !== null) {
-      setRedirect(true);
       router.push("/dashboard");
-    } else {
-      setRedirect(false);
     }
   }, [userId]);
 
   return (
     <>
-      {!loading && !redirect && (
+      {!userId && !loading && (
         <div
           className={classNames(styles.page_container, styles.letter_spacing)}
         >

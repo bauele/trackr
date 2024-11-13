@@ -156,6 +156,8 @@ export default function Dashboard() {
     newItems.push(item);
     newItems.push(...clientItems);
     setClientItems(newItems);
+
+    return item.id;
   }
 
   function onDeleteItem(selectedRows: Array<number>) {
@@ -221,7 +223,7 @@ export default function Dashboard() {
               </div>
               <InventoryTable
                 items={clientItems}
-                onAddItem={() => onAddItem()}
+                onAddItem={onAddItem}
                 onDeleteItem={(selectedRows) => onDeleteItem(selectedRows)}
                 onRowUpdate={(index, field, value) =>
                   onRowUpdate(index, field, value)
