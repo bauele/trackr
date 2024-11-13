@@ -203,7 +203,6 @@ export default function Dashboard() {
                 <div className={styles.heading_container}>
                   <div className={styles.heading_content}>
                     <h1>{userDisplayName}'s Inventory</h1>
-                    <h2>Last Modified: Today</h2>
                   </div>
                   <div>
                     <button
