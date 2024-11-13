@@ -12,6 +12,7 @@ interface InventoryRecordProps {
   isSelected: boolean;
   newRecord: boolean;
   onSelect: (event: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onRowUpdate: (field: string, value: string) => void;
 }
 
@@ -28,6 +29,7 @@ export const InventoryRecord = forwardRef<
       isSelected,
       newRecord,
       onSelect,
+      onKeyDown,
       onRowUpdate,
     },
     ref
@@ -48,6 +50,7 @@ export const InventoryRecord = forwardRef<
             //  If checkbox is clicked, call the provided callback function
             //  provided by parent
             onChange={(event) => onSelect(event)}
+            onKeyDown={(event) => onKeyDown(event)}
           />
         </td>
         <td>

@@ -106,6 +106,13 @@ export function InventoryTable({
     }
   }
 
+  function onKeyDown(event: any) {
+    if (event.key === "Delete") {
+      onDeleteItem(selectedRows);
+      setSelectedRows([]);
+    }
+  }
+
   return (
     <>
       <div className={styles.inventory_table_controls}>
@@ -158,6 +165,7 @@ export function InventoryTable({
                     //  currently selected.
                     checked={selectedRows.length === items.length}
                     onChange={toggleSelectAllRows}
+                    onKeyDown={(event) => onKeyDown(event)}
                   />
                 </th>
 
@@ -180,6 +188,7 @@ export function InventoryTable({
                   //  If the user checks the row, this component should handle the process
                   //  of selecting that row
                   onSelect={() => toggleSelectRow(index)}
+                  onKeyDown={(event) => onKeyDown(event)}
                   onRowUpdate={(field, value) =>
                     onRowUpdate(index, field, value)
                   }
