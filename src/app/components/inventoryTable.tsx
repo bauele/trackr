@@ -2,7 +2,7 @@ import styles from "./inventoryTableStyles.module.css";
 import classNames from "classnames";
 
 import { InventoryRecord } from "./inventoryRecord";
-import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useState, useEffect, ChangeEvent, KeyboardEvent } from "react";
 import { Timestamp } from "firebase-admin/firestore";
 import { ItemData } from "../hooks/useItems";
 
@@ -59,7 +59,7 @@ export function InventoryTable({
   //  Case 2: Initially all rows are selected   -> all rows will be deselected
   function toggleSelectAllRows() {
     //  Create a new array to contain the new rows to be selected
-    let newSelectedRows = Array<number>();
+    const newSelectedRows = Array<number>();
 
     if (!selectedRows) {
       for (let i = 0; i < items.length; i++) {
@@ -84,12 +84,12 @@ export function InventoryTable({
   }
 
   function sortTable(event: ChangeEvent<HTMLSelectElement>) {
-    let sortOption = event.target.value;
+    const sortOption = event.target.value;
     onSortTable(sortOption);
   }
 
   function convertTimestamp(timestamp: Timestamp) {
-    let date = timestamp.toDate();
+    const date = timestamp.toDate();
     const now = new Date();
 
     const sameDay =
@@ -107,7 +107,7 @@ export function InventoryTable({
     }
   }
 
-  function onKeyDown(event: any) {
+  function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Delete") {
       if (selectedRows) {
         onDeleteItem(selectedRows);

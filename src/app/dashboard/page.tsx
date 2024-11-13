@@ -13,7 +13,7 @@ import { ItemData } from "../hooks/useItems";
 export default function Dashboard() {
   //  The clientItems state holds what is currently loaded onto
   //  the dashboard
-  const [clientItems, setClientItems] = useState<Array<any>>([]);
+  const [clientItems, setClientItems] = useState<Array<ItemData>>([]);
   const [sortMode, setSortMode] = useState("date_added_dsc");
 
   //  The serverItems value is the list of items loaded directly
@@ -59,7 +59,7 @@ export default function Dashboard() {
 
   function onSortItems(sortOption: string) {
     //  Create a copy of the items to use later
-    let sortedItems = [...clientItems];
+    const sortedItems = [...clientItems];
 
     if (sortOption === "quantity_asc") {
       sortedItems.sort((a: ItemData, b: ItemData) => {
@@ -141,18 +141,18 @@ export default function Dashboard() {
 
   async function onAddItem() {
     //  Create a new item to be added
-    let item = buildItem();
+    const item = buildItem();
 
     //  Create the record in the database, then assigned
     //  the generated document id to the item object
-    let docId = await addItem(item);
+    const docId = await addItem(item);
     if (docId !== null) {
       item.id = docId;
     }
 
     //  Create a new list of items, adding the new item
     //  first and then including all the previous items
-    let newItems = new Array<any>();
+    const newItems = new Array<ItemData>();
     newItems.push(item);
     newItems.push(...clientItems);
     setClientItems(newItems);
@@ -166,7 +166,7 @@ export default function Dashboard() {
       deleteItem(clientItems[selectedRows[i]]);
     }
 
-    let newItems = clientItems.filter(
+    const newItems = clientItems.filter(
       (value, index) => !selectedRows.includes(index)
     );
     setClientItems(newItems);
@@ -174,10 +174,10 @@ export default function Dashboard() {
 
   function onRowUpdate(rowIndex: number, field: string, value: string) {
     //  Copy the item being updated
-    let oldItem = clientItems[rowIndex];
+    const oldItem = clientItems[rowIndex];
 
     //  Create a copy of the current data
-    let newItems = [...clientItems];
+    const newItems = [...clientItems];
 
     //  Update the specified field with the new value
     if (field === "quantity") {
@@ -204,7 +204,7 @@ export default function Dashboard() {
               <div className={styles.page_upper_container}>
                 <div className={styles.heading_container}>
                   <div className={styles.heading_content}>
-                    <h1>{userDisplayName}'s Inventory</h1>
+                    <h1>{userDisplayName}&apos;s Inventory</h1>
                   </div>
                   <div>
                     <button

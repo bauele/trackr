@@ -25,7 +25,7 @@ export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
         "If an account exists with this email address, an email will be sent with instructions on resetting your password."
       );
     } else {
-      let error = firebaseErrorToUserError(result);
+      const error = firebaseErrorToUserError(result);
       setLastError(error);
     }
   }
@@ -33,8 +33,8 @@ export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
   const handleInputChange = (event: React.FormEvent) => {
     //  Ensure that target element is in fact an input field
     if (event.target instanceof HTMLInputElement) {
-      let inputName = event.target.name;
-      let value = event.target.value;
+      const inputName = event.target.name;
+      const value = event.target.value;
 
       //  Determine which input was changed and set
       //  the matching state variable

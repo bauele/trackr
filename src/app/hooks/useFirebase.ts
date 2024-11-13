@@ -21,7 +21,7 @@ async function firebaseLogIn(email: string, password: string) {
   } catch (error) {
     //  A Firebase-specific error occured, such as an email email or password
     if (error instanceof FirebaseError) {
-      let errorCode = error.code;
+      const errorCode = error.code;
       return errorCode;
     }
 
@@ -56,7 +56,7 @@ async function firebaseCreateAccount(
   } catch (error) {
     //  A Firebase-specific error occured, such as an email email or password
     if (error instanceof FirebaseError) {
-      let errorCode = error.code;
+      const errorCode = error.code;
       return errorCode;
     }
 
@@ -76,7 +76,7 @@ async function firebaseResetPassword(email: string) {
     return "success";
   } catch (error) {
     if (error instanceof FirebaseError) {
-      let errorCode = error.code;
+      const errorCode = error.code;
       return errorCode;
     } else {
       return "";
@@ -89,7 +89,7 @@ async function firebaseSignOut() {
     await signOut(auth);
   } catch (error) {
     if (error instanceof FirebaseError) {
-      let errorCode = error.code;
+      const errorCode = error.code;
       return errorCode;
     } else {
       return "";
@@ -139,7 +139,6 @@ function firebaseErrorToUserError(error: string) {
 
 //  Custom authentication hook
 export function useFirebase() {
-  const [user, setUser] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);

@@ -1,12 +1,5 @@
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  FocusEventHandler,
-  useState,
-  useEffect,
-} from "react";
+import { useState } from "react";
 import styles from "./editableLabel.module.css";
-import classNames from "classnames";
 import React from "react";
 
 interface EditableLabelProps {
@@ -36,7 +29,7 @@ export function EditableLabel({
       | React.KeyboardEvent<HTMLInputElement>
   ) {
     //  Capture the event and get the new value
-    let target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement;
     let newValue = target.value;
 
     //  If user clicks outside of edit box without supplying a new value,

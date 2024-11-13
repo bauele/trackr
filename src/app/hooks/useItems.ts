@@ -43,7 +43,7 @@ export function useItems() {
     }
 
     const fetchData = async () => {
-      let items = await getAllItems();
+      const items = await getAllItems();
       setServerItems(items);
     };
 
@@ -51,7 +51,7 @@ export function useItems() {
   }, [userId]);
 
   function buildItem() {
-    let item = {
+    const item = {
       id: null,
       userId: null,
       itemName: "New Item",
@@ -74,12 +74,12 @@ export function useItems() {
 
       //  Get all of the documents, then iterate through them and
       //  compile them into a list
-      let itemList = Array<ItemData>();
+      const itemList = Array<ItemData>();
       try {
-        let querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           //  Store the item data in an object
-          let item = doc.data();
+          const item = doc.data();
 
           //  Attach the document id to the object
           item.id = doc.id;
@@ -137,8 +137,8 @@ export function useItems() {
     if (userId && newItem.id && oldItem.id) {
       try {
         const docRef = doc(collection(db, "items"), oldItem.id);
-        (newItem.lastModified = Timestamp.fromDate(new Date())),
-          await updateDoc(docRef, newItem);
+        newItem.lastModified = Timestamp.fromDate(new Date());
+        await updateDoc(docRef, newItem);
       } catch (error) {
         //  If an error occurs, report it to the caller
         console.error("Error getting documents: ", error);

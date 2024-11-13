@@ -21,7 +21,7 @@ export default function Login({
   const [password, setPassword] = useState("");
   const [lastError, setLastError] = useState("");
 
-  const { userId, firebaseLogIn, firebaseErrorToUserError } = useFirebase();
+  const { firebaseLogIn, firebaseErrorToUserError } = useFirebase();
 
   async function logIn() {
     let result = await firebaseLogIn(email, password);
@@ -31,7 +31,7 @@ export default function Login({
     if (result === "success") {
       onLogInSuccess();
     } else {
-      let error = firebaseErrorToUserError(result);
+      const error = firebaseErrorToUserError(result);
       setLastError(error);
     }
   }
@@ -39,8 +39,8 @@ export default function Login({
   const handleInputChange = (event: React.FormEvent) => {
     //  Ensure that target element is in fact an input field
     if (event.target instanceof HTMLInputElement) {
-      let inputName = event.target.name;
-      let value = event.target.value;
+      const inputName = event.target.name;
+      const value = event.target.value;
 
       //  Determine which input was changed and set
       //  the matching state variable
@@ -86,7 +86,7 @@ export default function Login({
         />
 
         <div>
-          <a onClick={onCreateAccount}>I don't have an account</a>
+          <a onClick={onCreateAccount}>I don&apos;t have an account</a>
           <a onClick={onForgotPassword}>Forgot password</a>
         </div>
       </form>
