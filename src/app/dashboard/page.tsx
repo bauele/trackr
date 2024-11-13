@@ -75,9 +75,9 @@ export default function Dashboard() {
       });
     } else if (sortOption === "item_name_asc") {
       sortedItems.sort((a: ItemData, b: ItemData) => {
-        if (a.itemName < b.itemName) {
+        if (a.itemName.toUpperCase() < b.itemName.toUpperCase()) {
           return -1;
-        } else if (a.itemName > b.itemName) {
+        } else if (a.itemName.toUpperCase() > b.itemName.toUpperCase()) {
           return 1;
         }
 
@@ -85,9 +85,9 @@ export default function Dashboard() {
       });
     } else if (sortOption === "item_name_dsc") {
       sortedItems.sort((a: ItemData, b: ItemData) => {
-        if (a.itemName > b.itemName) {
+        if (a.itemName.toUpperCase() > b.itemName.toUpperCase()) {
           return -1;
-        } else if (a.itemName < b.itemName) {
+        } else if (a.itemName.toUpperCase() < b.itemName.toUpperCase()) {
           return 1;
         }
 
