@@ -24,34 +24,20 @@ export function InventoryTable({
   onRowUpdate,
   onSortTable,
 }: InventoryTableProps) {
-  const [selectedRows, setSelectedRows] = useState<Array<number> | null>([]);
-  const [newRecordAdded, setNewRecordAdded] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<Array<number> | null>(null);
   const [recentlyAddedItem, setRecentlyAddedItem] = useState<
     string | undefined | null
   >(undefined);
-  const prevItems = useRef(items);
 
-  useEffect(() => {
-    if (prevItems.current.length == 0) {
-      setNewRecordAdded(false);
-    }
-    //  If there are no items, then next item added should
-    //  trigger auto focus
-    else if (items.length === 0) {
-      setNewRecordAdded(true);
-    }
-    //  If there are more items now than there were previously
-    //  trigger auto focus
-    else if (prevItems.current.length < items.length) {
-      setNewRecordAdded(true);
-    } else {
-      setNewRecordAdded(false);
-    }
-    prevItems.current = items;
-  }, [items]);
+  useEffect(() => {}, [items]);
 
   //  Add or remove a selected row
   const toggleSelectRow = (rowIndex: number) => {
+    //  If selectedRows is null, initialize it to an array
+    if (!selectedRows) {
+      setSelectedRows([rowIndex]);
+    }
+
     //  If the row is already select it, unselect it
     if (selectedRows?.includes(rowIndex)) {
       setSelectedRows(
@@ -74,6 +60,14 @@ export function InventoryTable({
   function toggleSelectAllRows() {
     //  Create a new array to contain the new rows to be selected
     let newSelectedRows = Array<number>();
+
+    if (!selectedRows) {
+      for (let i = 0; i < items.length; i++) {
+        newSelectedRows.push(i);
+        setSelectedRows(newSelectedRows);
+      }
+    }
+
     if (selectedRows) {
       if (
         selectedRows.length === 0 ||
