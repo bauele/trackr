@@ -10,6 +10,7 @@ interface InventoryRecordProps {
   quantity: string;
   lastModified: string;
   isSelected: boolean;
+  newRecord: boolean;
   onSelect: (event: ChangeEvent<HTMLInputElement>) => void;
   onRowUpdate: (field: string, value: string) => void;
 }
@@ -25,18 +26,12 @@ export const InventoryRecord = forwardRef<
       quantity,
       lastModified,
       isSelected,
+      newRecord,
       onSelect,
       onRowUpdate,
     },
     ref
   ) => {
-    function updateValue() {
-      //  Send message to table insructing it that a value was.
-      //  Each editable label in this row should have an id
-      //  assigned that will allow it to be modified in json
-      //  at the table level
-    }
-
     return (
       <tr
         className={classNames(
@@ -61,6 +56,7 @@ export const InventoryRecord = forwardRef<
               text={itemName}
               fieldName="itemName"
               inputMode="text"
+              isExternalEditing={newRecord ? true : false}
               onUpdate={(field, value) => onRowUpdate(field, value)}
             />
             {dateAdded}
@@ -72,6 +68,7 @@ export const InventoryRecord = forwardRef<
               text={quantity}
               fieldName="quantity"
               inputMode="numeric"
+              isExternalEditing={false}
               onUpdate={(field, value) => onRowUpdate(field, value)}
             />
             {lastModified}

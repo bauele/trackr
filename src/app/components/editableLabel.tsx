@@ -7,11 +7,17 @@ import {
 } from "react";
 import styles from "./editableLabel.module.css";
 import classNames from "classnames";
+import React from "react";
 
 interface EditableLabelProps {
   text: string;
   fieldName: string;
   inputMode: "text" | "numeric";
+
+  //  This props allows the editing mode to be set
+  //  from parent component without having to move this
+  //  component's entire state and logic to parent
+  isExternalEditing: boolean;
   onUpdate: (field: string, value: string) => void;
 }
 
@@ -19,6 +25,7 @@ export function EditableLabel({
   text,
   fieldName,
   inputMode,
+  isExternalEditing,
   onUpdate,
 }: EditableLabelProps) {
   const [isEditingMode, setIsEditingMode] = useState(false);
@@ -60,7 +67,7 @@ export function EditableLabel({
     }
   };
 
-  return isEditingMode ? (
+  return isEditingMode || isExternalEditing ? (
     //  If selected, return an editable text field
     <input
       className={styles.editable_input}

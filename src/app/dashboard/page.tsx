@@ -14,6 +14,7 @@ export default function Dashboard() {
   //  The clientItems state holds what is currently loaded onto
   //  the dashboard
   const [clientItems, setClientItems] = useState<Array<any>>([]);
+  const [sortMode, setSortMode] = useState("date_added_dsc");
 
   //  The serverItems value is the list of items loaded directly
   //  from the server
@@ -135,6 +136,7 @@ export default function Dashboard() {
     }
 
     setClientItems(sortedItems);
+    setSortMode(sortOption);
   }
 
   async function onAddItem() {
@@ -186,8 +188,8 @@ export default function Dashboard() {
     //  Update the item in the database
     updateItem(oldItem, newItems[rowIndex]);
 
-    //  Set the item list to the updated list
-    setClientItems(newItems);
+    //  Sort the new item list
+    onSortItems(sortMode);
   }
 
   return (

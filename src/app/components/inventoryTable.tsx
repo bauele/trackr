@@ -2,7 +2,7 @@ import styles from "./inventoryTableStyles.module.css";
 import classNames from "classnames";
 
 import { InventoryRecord } from "./inventoryRecord";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
 import { Timestamp } from "firebase-admin/firestore";
 import { ItemData } from "../hooks/useItems";
 
@@ -25,8 +25,18 @@ export function InventoryTable({
   onSortTable,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<Array<number>>([]);
+  const [newRecordAdded, setNewRecordAdded] = useState(false);
+  const prevItems = useRef(items);
 
-  useEffect(() => {}, [items]);
+  useEffect(() => {
+    if (prevItems.current.length == 0) {
+    } else if (prevItems.current.length < items.length) {
+      setNewRecordAdded(true);
+    } else {
+      setNewRecordAdded(false);
+    }
+    prevItems.current = items;
+  }, [items]);
 
   //  Add or remove a selected row
   const toggleSelectRow = (rowIndex: number) => {
@@ -157,6 +167,7 @@ export function InventoryTable({
                   lastModified={convertTimestamp(item.lastModified)}
                   //  The record's checkbox should show as checked if the row is selected
                   isSelected={selectedRows.includes(index)}
+                  newRecord={index == 0 && newRecordAdded ? true : false}
                   //  If the user checks the row, this component should handle the process
                   //  of selecting that row
                   onSelect={() => toggleSelectRow(index)}
