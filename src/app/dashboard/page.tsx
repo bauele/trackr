@@ -95,9 +95,9 @@ export default function Dashboard() {
       });
     } else if (sortOption === "date_added_asc") {
       sortedItems.sort((a: ItemData, b: ItemData) => {
-        if (a.dateAdded.seconds > b.dateAdded.seconds) {
+        if (a.dateAdded.nanoseconds > b.dateAdded.nanoseconds) {
           return 1;
-        } else if (a.dateAdded.seconds < b.dateAdded.seconds) {
+        } else if (a.dateAdded.nanoseconds < b.dateAdded.nanoseconds) {
           return -1;
         }
 
@@ -105,9 +105,9 @@ export default function Dashboard() {
       });
     } else if (sortOption === "date_added_dsc") {
       sortedItems.sort((a: ItemData, b: ItemData) => {
-        if (a.dateAdded.seconds < b.dateAdded.seconds) {
+        if (a.dateAdded.nanoseconds < b.dateAdded.nanoseconds) {
           return 1;
-        } else if (a.dateAdded.seconds > b.dateAdded.seconds) {
+        } else if (a.dateAdded.nanoseconds > b.dateAdded.nanoseconds) {
           return -1;
         }
 
