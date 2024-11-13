@@ -36,6 +36,17 @@ export default function Dashboard() {
   //  set the page to display them
   useEffect(() => {
     if (serverItems) {
+      //  Sort items by descending date first
+      serverItems.sort((a: ItemData, b: ItemData) => {
+        if (a.dateAdded.seconds < b.dateAdded.seconds) {
+          return 1;
+        } else if (a.dateAdded.seconds > b.dateAdded.seconds) {
+          return -1;
+        }
+
+        return 0;
+      });
+
       setClientItems(serverItems);
     }
   }, [serverItems]);
@@ -60,6 +71,66 @@ export default function Dashboard() {
         const quantityA = Number(a.quantity);
         const quantityB = Number(b.quantity);
         return quantityB - quantityA;
+      });
+    } else if (sortOption === "item_name_asc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.itemName < b.itemName) {
+          return -1;
+        } else if (a.itemName > b.itemName) {
+          return 1;
+        }
+
+        return 0;
+      });
+    } else if (sortOption === "item_name_dsc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.itemName > b.itemName) {
+          return -1;
+        } else if (a.itemName < b.itemName) {
+          return 1;
+        }
+
+        return 0;
+      });
+    } else if (sortOption === "date_added_asc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.dateAdded.seconds > b.dateAdded.seconds) {
+          return 1;
+        } else if (a.dateAdded.seconds < b.dateAdded.seconds) {
+          return -1;
+        }
+
+        return 0;
+      });
+    } else if (sortOption === "date_added_dsc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.dateAdded.seconds < b.dateAdded.seconds) {
+          return 1;
+        } else if (a.dateAdded.seconds > b.dateAdded.seconds) {
+          return -1;
+        }
+
+        return 0;
+      });
+    } else if (sortOption === "last_modified_asc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.lastModified.seconds > b.lastModified.seconds) {
+          return 1;
+        } else if (a.lastModified.seconds < b.lastModified.seconds) {
+          return -1;
+        }
+
+        return 0;
+      });
+    } else if (sortOption === "last_modified_dsc") {
+      sortedItems.sort((a: ItemData, b: ItemData) => {
+        if (a.lastModified.seconds < b.lastModified.seconds) {
+          return 1;
+        } else if (a.lastModified.seconds > b.lastModified.seconds) {
+          return -1;
+        }
+
+        return 0;
       });
     }
 

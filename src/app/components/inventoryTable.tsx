@@ -106,7 +106,9 @@ export function InventoryTable({
           <label htmlFor="sort">Sort By</label>
           <select name="sort" id="sort" onChange={(event) => sortTable(event)}>
             <option value="date_added_asc">Date Added Asc.</option>
-            <option value="date_added_dsc">Date Added Dsc.</option>
+            <option value="date_added_dsc" selected>
+              Date Added Dsc.
+            </option>
             <option value="item_name_asc">Item Name Asc.</option>
             <option value="item_name_dsc">Item Name Dsc.</option>
             <option value="quantity_asc">Quantity Asc.</option>
