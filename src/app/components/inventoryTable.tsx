@@ -30,7 +30,16 @@ export function InventoryTable({
 
   useEffect(() => {
     if (prevItems.current.length == 0) {
-    } else if (prevItems.current.length < items.length) {
+      setNewRecordAdded(false);
+    }
+    //  If there are no items, then next item added should
+    //  trigger auto focus
+    else if (items.length === 0) {
+      setNewRecordAdded(true);
+    }
+    //  If there are more items now than there were previously
+    //  trigger auto focus
+    else if (prevItems.current.length < items.length) {
       setNewRecordAdded(true);
     } else {
       setNewRecordAdded(false);
