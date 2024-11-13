@@ -161,7 +161,7 @@ export default function Dashboard() {
   function onDeleteItem(selectedRows: Array<number>) {
     //  Delete every item that was selected
     for (let i = 0; i < selectedRows.length; i++) {
-      deleteItem(clientItems[i]);
+      deleteItem(clientItems[selectedRows[i]]);
     }
 
     let newItems = clientItems.filter(
