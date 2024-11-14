@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./editableLabel.module.css";
 import React from "react";
+import classNames from "classnames";
 
 interface EditableLabelProps {
   text: string;
@@ -22,6 +23,7 @@ export function EditableLabel({
   onUpdate,
 }: EditableLabelProps) {
   const [isEditingMode, setIsEditingMode] = useState(false);
+  const [errorMode, setErrorMode] = useState(false);
 
   function updateValue(
     event:
@@ -38,10 +40,21 @@ export function EditableLabel({
       newValue = target.placeholder;
     }
 
+    //  If input mode is numeric, prevent user
+    //  from supplying any nondigits
+    if (inputMode === "numeric") {
+      const validInput = /^\d+$/.test(newValue);
+      if (!validInput) {
+        setErrorMode(true);
+        return;
+      }
+    }
+
     //  Utilize provided callback function from parent
     onUpdate(fieldName, newValue);
 
     //  Exit editing mode
+    setErrorMode(false);
     setIsEditingMode(false);
   }
 
@@ -63,7 +76,10 @@ export function EditableLabel({
   return isEditingMode || isExternalEditing ? (
     //  If selected, return an editable text field
     <input
-      className={styles.editable_input}
+      className={classNames(
+        styles.editable_input,
+        errorMode && styles.input_error
+      )}
       type="text"
       inputMode={inputMode}
       placeholder={text}

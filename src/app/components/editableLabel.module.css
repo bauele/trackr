@@ -5,3 +5,7 @@
       being clipped */
   width: 98%;
 }
+
+.input_error {
+  border: 2px solid red;
+}
