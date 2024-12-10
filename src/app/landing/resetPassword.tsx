@@ -6,16 +6,22 @@ import classNames from "classnames";
 import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
+//  These props are callback functions that are called in
+//  reponse to actions taken while using form
 interface CreateAccountProps {
   onBackToLogIn: () => void;
 }
 
 export default function ResetPassword({ onBackToLogIn }: CreateAccountProps) {
+  //  State variables used to track what text the user
+  //  has suppied for each of the form fields
   const [email, setEmail] = useState("");
   const [lastError, setLastError] = useState("");
   const { firebaseResetPassword, firebaseErrorToUserError } = useFirebase();
 
   async function resetPassword() {
+    //  Attempt to reset the password using the Firebase
+    //  authentication module
     let result = await firebaseResetPassword(email);
     result = result?.trim();
 

@@ -84,6 +84,8 @@ async function firebaseResetPassword(email: string) {
   }
 }
 
+//  Signs the user out of the service
+//  If unsuccessful, returns an error code
 async function firebaseSignOut() {
   try {
     await signOut(auth);
@@ -96,6 +98,7 @@ async function firebaseSignOut() {
     }
   }
 }
+
 //  Maps a Firebase-specific error code to a user friendly string
 //  If error is not Firebase-specific, returns a generic error
 function firebaseErrorToUserError(error: string) {
@@ -137,7 +140,7 @@ function firebaseErrorToUserError(error: string) {
   return errorMessage;
 }
 
-//  Custom authentication hook
+//  Custom authentication hook that uses the Firebase module
 export function useFirebase() {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);

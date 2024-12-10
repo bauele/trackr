@@ -19,12 +19,22 @@ enum PAGE_STATE {
   RESET_PASSWORD,
 }
 
+//  This component represents the Landing page. It will allow
+//  the user to log in, create an account, or reset their password.
+//  If the user is already logged in when accessing this page, it
+//  will redirect them to the Dashboard page
 export default function Landing() {
+  //  Values obtained from a hook that return the user's id or
+  //  whether or not the log in state is still being loaded
   const { userId, loading } = useFirebase();
   const router = useRouter();
 
+  //  Page state that determines whether to show the content for
+  //  logging in, creating an account, or resetting a password
   const [pageState, setPageState] = useState(PAGE_STATE.LOG_IN);
 
+  //  When the userId value updates, redirect the user to the
+  //  dashboard if they are actively logged in
   useEffect(() => {
     if (userId !== null) {
       router.push("/dashboard");
@@ -33,6 +43,7 @@ export default function Landing() {
 
   return (
     <>
+      {/*Do not render anything until page stops loading and the user id has been obtained */}
       {!userId && !loading && (
         <div
           className={classNames(styles.page_container, styles.letter_spacing)}

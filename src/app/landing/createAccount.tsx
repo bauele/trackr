@@ -6,6 +6,8 @@ import classNames from "classnames";
 import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
+//  These props are callback functions that are called in
+//  reponse to actions taken while using form
 interface CreateAccountProps {
   onBackToLogIn: () => void;
   onCreateAccountSuccess: () => void;
@@ -15,6 +17,8 @@ export default function CreateAccount({
   onBackToLogIn,
   onCreateAccountSuccess,
 }: CreateAccountProps) {
+  //  State variables used to track what text the user
+  //  has suppied for each of the form fields
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +28,7 @@ export default function CreateAccount({
   const { firebaseCreateAccount, firebaseErrorToUserError } = useFirebase();
 
   async function createAccount() {
+    //  Ensure a display name has been entered
     if (displayName === "") {
       setLastError("Please enter a display name.");
       return;
@@ -35,6 +40,8 @@ export default function CreateAccount({
       return;
     }
 
+    //  Attempt to create an account useing the firebase authentication
+    //  module
     let result = await firebaseCreateAccount(email, password, displayName);
     result = result?.trim();
 

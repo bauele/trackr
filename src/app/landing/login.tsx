@@ -6,24 +6,32 @@ import classNames from "classnames";
 import { useFirebase } from "../hooks/useFirebase";
 import { useState } from "react";
 
+//  These props are callback functions that are called in
+//  reponse to actions taken while using form
 interface LoginProps {
   onCreateAccount: () => void;
   onForgotPassword: () => void;
   onLogInSuccess: () => void;
 }
 
+//  This component represents the Login form.
 export default function Login({
   onCreateAccount,
   onForgotPassword,
   onLogInSuccess,
 }: LoginProps) {
+  //  State variables used to track what text the user
+  //  has suppied for each of the form fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [lastError, setLastError] = useState("");
 
+  //  This hook exposes functions that can be used to
+  //  perform actions using the Firebase module
   const { firebaseLogIn, firebaseErrorToUserError } = useFirebase();
 
   async function logIn() {
+    //  Attempt to log in to the authentication service
     let result = await firebaseLogIn(email, password);
     result = result?.trim();
 
